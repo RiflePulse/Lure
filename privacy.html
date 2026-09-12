@@ -3,160 +3,287 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>LurkVR — Privacy Policy</title>
+    <title>L.U.R.E — Privacy Policy</title>
 
-<style>
+    <meta
+        name="description"
+        content="L.U.R.E Privacy Policy — RDT RiflePulse Development Team."
+    >
 
-* {
-    box-sizing: border-box;
-}
+    <style>
 
-body {
-    margin: 0;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+        html {
+            scroll-behavior: smooth;
+        }
 
-    background:
-        radial-gradient(
-            circle at top,
-            #350808 0%,
-            #0d0404 40%,
-            #030303 85%
-        );
+        body {
 
-    color: #eee;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
 
-    line-height: 1.7;
-}
+            background:
+                radial-gradient(
+                    circle at top,
+                    #320000,
+                    #090909 55%
+                );
 
-header {
-    background: rgba(2,2,2,.95);
+            color: #eeeeee;
 
-    border-bottom:
-        1px solid #451111;
+            line-height: 1.8;
 
-    padding: 22px;
-}
+            min-height: 100vh;
 
-header div {
-    max-width: 900px;
+        }
 
-    margin: auto;
-}
+        body::before {
 
-header a {
-    color: #aaa;
+            content: "";
 
-    text-decoration: none;
-}
+            position: fixed;
 
-header a:hover {
-    color: #ff3333;
-}
+            inset: 0;
 
-main {
-    max-width: 900px;
+            pointer-events: none;
 
-    margin: auto;
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.025) 0px,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 2px,
+                    transparent 5px
+                );
 
-    padding:
-        60px
-        25px
-        100px;
-}
+            opacity: 0.25;
 
-.icon {
-    width: 90px;
+        }
 
-    height: 90px;
+        .top {
 
-    object-fit: cover;
+            text-align: center;
 
-    border-radius: 16px;
+            padding: 70px 20px 40px;
 
-    border:
-        1px solid #641414;
+            border-bottom:
+                1px solid #550000;
 
-    margin-bottom: 25px;
-}
+        }
 
-h1 {
-    font-size: 45px;
+        .icon {
 
-    line-height: 1;
-}
+            width: 110px;
+            height: 110px;
 
-h1 span {
-    color: #d71919;
-}
+            object-fit: cover;
 
-.updated {
-    color: #777;
+            border:
+                2px solid #8b0000;
 
-    margin-bottom: 45px;
-}
+            box-shadow:
+                0 0 30px rgba(255,0,0,0.3);
 
-h2 {
-    margin-top: 45px;
+            margin-bottom: 25px;
 
-    border-left:
-        3px solid #d71919;
+        }
 
-    padding-left: 12px;
-}
+        .tag {
 
-p {
-    color: #c1c1c1;
-}
+            display: inline-block;
 
-.notice {
-    padding: 25px;
+            color: #ff3030;
 
-    background:
-        rgba(100,0,0,.12);
+            border:
+                1px solid #8b0000;
 
-    border:
-        1px solid #491414;
+            padding:
+                7px 15px;
 
-    border-radius: 8px;
+            font-size: 11px;
 
-    margin:
-        25px
-        0;
-}
+            letter-spacing: 3px;
 
-.notice strong {
-    color: #ff4444;
-}
+            margin-bottom: 20px;
 
-footer {
-    border-top:
-        1px solid #292929;
+        }
 
-    background: #020202;
+        h1 {
 
-    text-align: center;
+            font-size:
+                clamp(40px, 7vw, 75px);
 
-    padding: 40px;
+            letter-spacing: 6px;
 
-    color: #666;
-}
+            text-shadow:
+                0 0 25px rgba(255,0,0,0.35);
 
-footer a {
-    color: #999;
+        }
 
-    text-decoration: none;
-}
+        .updated {
 
-</style>
+            margin-top: 12px;
+
+            color: #777777;
+
+            font-size: 13px;
+
+        }
+
+        .container {
+
+            max-width: 950px;
+
+            margin: auto;
+
+            padding:
+                70px 20px 100px;
+
+        }
+
+        .notice {
+
+            padding: 25px;
+
+            margin-bottom: 45px;
+
+            background:
+                rgba(80,0,0,0.25);
+
+            border:
+                1px solid #650000;
+
+        }
+
+        .notice strong {
+
+            color: #ff3030;
+
+        }
+
+        h2 {
+
+            margin-top: 50px;
+
+            margin-bottom: 15px;
+
+            color: #ff3030;
+
+            font-size: 24px;
+
+            letter-spacing: 2px;
+
+        }
+
+        p {
+
+            color: #c5c5c5;
+
+            margin-bottom: 18px;
+
+        }
+
+        ul {
+
+            margin:
+                10px 0 25px 25px;
+
+            color: #c5c5c5;
+
+        }
+
+        li {
+
+            margin-bottom: 10px;
+
+        }
+
+        .data-box {
+
+            padding: 25px;
+
+            background: #0c0c0c;
+
+            border-left:
+                3px solid #8b0000;
+
+            margin:
+                25px 0;
+
+        }
+
+        .back {
+
+            display: inline-block;
+
+            margin-top: 40px;
+
+            padding:
+                13px 22px;
+
+            background:
+                #650000;
+
+            border:
+                1px solid #a00000;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            transition: 0.2s;
+
+        }
+
+        .back:hover {
+
+            background: #a00000;
+
+            box-shadow:
+                0 0 25px rgba(255,0,0,0.35);
+
+        }
+
+        footer {
+
+            text-align: center;
+
+            padding: 40px 20px;
+
+            border-top:
+                1px solid #300000;
+
+            color: #666666;
+
+            font-size: 12px;
+
+        }
+
+        footer strong {
+
+            color: #ff3030;
+
+        }
+
+    </style>
 
 </head>
 
@@ -164,240 +291,267 @@ footer a {
 <body>
 
 
-<header>
+    <header class="top">
 
-<div>
+        <img
+            src="icon.png"
+            alt="L.U.R.E icon"
+            class="icon"
+        >
 
-<a href="index.html">
-← Return to LurkVR
-</a>
+        <div class="tag">
+            RDT // OFFICIAL DOCUMENT
+        </div>
 
-</div>
+        <h1>L.U.R.E</h1>
 
-</header>
+        <div class="updated">
+            Privacy Policy — Last Updated: September 12, 2026
+        </div>
 
+    </header>
 
-<main>
 
+    <main class="container">
 
-<img
-src="icon.png"
-alt="LurkVR icon"
-class="icon"
->
 
+        <div class="notice">
 
-<h1>
-Lurk<span>VR</span>
-Privacy Policy
-</h1>
+            <strong>IMPORTANT:</strong>
 
+            L.U.R.E is currently in beta testing.
+            This Privacy Policy describes the current way
+            L.U.R.E and RDT handle information.
 
-<p class="updated">
+        </div>
 
-Last updated:
-September 12, 2026
 
-</p>
+        <h2>1. About L.U.R.E</h2>
 
+        <p>
+            L.U.R.E is a virtual reality game developed by
+            <strong>RDT — RiflePulse Development Team.</strong>
+        </p>
 
-<div class="notice">
+        <p>
+            This Privacy Policy applies to the L.U.R.E game,
+            its related services and the official L.U.R.E website.
+        </p>
 
-<strong>
-LurkVR is currently in beta testing.
-</strong>
 
-<p>
+        <h2>2. Information We Collect</h2>
 
-LurkVR is actively being developed.
-This means features and data practices may
-change as new systems are introduced.
+        <p>
+            L.U.R.E is currently in beta and does not currently
+            operate its own player account database.
+        </p>
 
-This policy will be updated when necessary.
+        <p>
+            RDT does not intentionally request information such as
+            your real name, home address, telephone number or
+            payment information directly through the game.
+        </p>
 
-</p>
+        <div class="data-box">
 
-</div>
+            <strong>
+                VR / DEVICE INFORMATION
+            </strong>
 
+            <p>
+                L.U.R.E may process information required for the
+                game to function on a supported VR device, including
+                headset and controller tracking information used
+                for gameplay.
+            </p>
 
-<h2>
-1. Information We Collect
-</h2>
+            <p>
+                This information is used to provide the VR experience
+                and is not intentionally used by RDT to create a
+                personal profile of the player.
+            </p>
 
-<p>
+        </div>
 
-LurkVR does not currently intentionally
-collect or store personal information such
-as a user's name, email address, postal
-address, telephone number or payment
-information directly through the game.
 
-</p>
+        <h2>3. How Information Is Used</h2>
 
-<p>
+        <p>
+            Information required by the game may be used to:
+        </p>
 
-The game may process information required
-for VR functionality, such as headset and
-controller tracking information, so that
-VR movement and interaction can function.
+        <ul>
 
-</p>
+            <li>Provide VR gameplay functionality.</li>
 
+            <li>Track player movement required for gameplay.</li>
 
-<h2>
-2. How Information Is Used
-</h2>
+            <li>Allow controllers and headset tracking to function.</li>
 
-<p>
+            <li>Improve stability and development of L.U.R.E.</li>
 
-Information processed by LurkVR is used
-only for purposes necessary to operate
-the game and provide its gameplay and
-VR functionality.
+        </ul>
 
-</p>
 
+        <h2>4. Third-Party Platforms</h2>
 
-<h2>
-3. Information Stored by LurkVR
-</h2>
+        <p>
+            L.U.R.E may be distributed through Meta's platform.
+            Meta may process information according to its own
+            privacy policies and terms.
+        </p>
 
-<p>
+        <p>
+            RDT does not control information that Meta independently
+            processes through the Meta Horizon platform.
+        </p>
 
-LurkVR does not currently operate its own
-personal user-account database.
 
-</p>
+        <h2>5. Website</h2>
 
-<p>
+        <p>
+            The L.U.R.E website is primarily an informational
+            website for the game and RDT.
+        </p>
 
-If future versions introduce systems that
-store personal information, this policy
-will be updated to describe what is stored
-and why.
+        <p>
+            The website does not currently provide an RDT account
+            system or direct payment system.
+        </p>
 
-</p>
 
+        <h2>6. Developer Applications</h2>
 
-<h2>
-4. Data Deletion
-</h2>
+        <p>
+            Applications to join RDT may be submitted through the
+            official developer application form.
+        </p>
 
-<p>
+        <p>
+            Information submitted through that form is provided
+            voluntarily by the applicant and is used for reviewing
+            applications to the RDT development team.
+        </p>
 
-LurkVR currently does not maintain personal
-user accounts or a personal database
-containing user information.
+        <p>
+            The developer application form is hosted by Google,
+            which may process submitted information according to
+            Google's own policies.
+        </p>
 
-</p>
 
-<p>
+        <h2>7. Beta Testing</h2>
 
-If LurkVR begins storing personal user data,
-a specific method for requesting deletion
-will be provided in this Privacy Policy.
+        <p>
+            L.U.R.E is currently in beta testing.
+            Beta testing may involve external Meta services or
+            testing systems provided by the platform.
+        </p>
 
-</p>
+        <p>
+            Information processed by those external services may
+            be governed by their respective privacy policies.
+        </p>
 
 
-<h2>
-5. Meta Horizon Platform
-</h2>
+        <h2>8. Data Deletion Requests</h2>
 
-<p>
+        <p>
+            Because L.U.R.E currently does not maintain its own
+            player account database, RDT does not currently have
+            a player-account deletion system.
+        </p>
 
-LurkVR may be distributed through the
-Meta Horizon Store.
+        <p>
+            If you believe RDT has received or stored personal
+            information relating to you and would like to request
+            deletion, submit a request through the official
+            RDT developer application form and clearly state:
+        </p>
 
-Meta may independently process information
-through its devices, services and platform.
+        <div class="data-box">
 
-Information processed directly by Meta is
-governed by Meta's applicable policies.
+            <strong>
+                "PRIVACY / DATA DELETION REQUEST"
+            </strong>
 
-</p>
+            <p>
+                Include enough information for RDT to identify
+                the relevant submission without providing
+                unnecessary personal information.
+            </p>
 
+        </div>
 
-<h2>
-6. Third-Party Services
-</h2>
+        <p>
+            If L.U.R.E introduces accounts, analytics, multiplayer
+            services or other systems that store additional
+            personal information, this Privacy Policy will be
+            updated to explain those changes and the applicable
+            deletion process.
+        </p>
 
-<p>
 
-LurkVR does not currently intentionally
-send personal information to third-party
-services operated by the development team.
+        <h2>9. Children's Privacy</h2>
 
-If this changes, this policy will be updated.
+        <p>
+            L.U.R.E is not designed to intentionally collect
+            personal information from children through its own
+            account system.
+        </p>
 
-</p>
+        <p>
+            Platform age requirements and parental controls may
+            still apply depending on the platform used to access
+            L.U.R.E.
+        </p>
 
 
-<h2>
-7. Changes to This Policy
-</h2>
+        <h2>10. Changes To This Policy</h2>
 
-<p>
+        <p>
+            RDT may update this Privacy Policy when L.U.R.E's
+            features, services or data practices change.
+        </p>
 
-This Privacy Policy may change as LurkVR
-develops and new features are introduced.
+        <p>
+            The latest version will be published on this page.
+        </p>
 
-The latest version will always be available
-on this page.
 
-</p>
+        <h2>11. Development Team</h2>
 
+        <p>
+            <strong>RDT — RiflePulse Development Team</strong>
+        </p>
 
-<h2>
-8. Development Team
-</h2>
+        <p>
+            RDT is the development team responsible for L.U.R.E.
+        </p>
 
-<p>
 
-LurkVR is developed by
+        <a
+            class="back"
+            href="index.html"
+        >
+            ← RETURN TO L.U.R.E
+        </a>
 
-<strong>
-RDT — RiflePulse Development Team
-</strong>.
 
-</p>
+    </main>
 
 
-<h2>
-9. Contact
-</h2>
+    <footer>
 
-<p>
+        <strong>
+            RDT — RIFLEPULSE DEVELOPMENT TEAM
+        </strong>
 
-For privacy questions concerning LurkVR,
-please use the official contact method
-provided by the LurkVR development team.
+        <br><br>
 
-</p>
+        L.U.R.E © 2026 RDT
 
-
-</main>
-
-
-<footer>
-
-<p>
-<strong>LURKVR</strong>
-</p>
-
-<p>
-RDT — RiflePulse Development Team
-</p>
-
-<p style="margin-top:15px;">
-
-<a href="index.html">
-Back to website
-</a>
-
-</p>
-
-</footer>
+    </footer>
 
 
 </body>
