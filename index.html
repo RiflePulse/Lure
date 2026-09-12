@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LurkVR | Official Website</title>
+
+    <meta name="description"
+          content="LurkVR is a VR horror game set inside a mysterious research facility.">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top, #321010 0%, #120707 35%, #050505 75%);
+            color: #f1f1f1;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.92);
+            border-bottom: 1px solid #3a1515;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: 3px;
+        }
+
+        .logo span,
+        h1 span,
+        .section-title span {
+            color: #d71919;
+        }
+
+        nav a {
+            color: #cccccc;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            color: #ff3333;
+        }
+
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .warning {
+            display: inline-block;
+            border: 1px solid #8d2020;
+            background: rgba(100, 0, 0, 0.25);
+            color: #ff6666;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: clamp(55px, 11vw, 120px);
+            line-height: 0.9;
+            letter-spacing: 8px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.25);
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            color: #c7c7c7;
+            font-size: 19px;
+        }
+
+        .button-row {
+            margin-top: 35px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 6px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #8f2020;
+            color: white;
+            background: #a41414;
+        }
+
+        .button:hover {
+            background: #d51d1d;
+        }
+
+        .button.secondary {
+            background: transparent;
+            border-color: #555;
+        }
+
+        section {
+            max-width: 1000px;
+            margin: auto;
+            padding: 80px 24px;
+        }
+
+        .section-title {
+            font-size: 38px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            color: #c0c0c0;
+            font-size: 17px;
+            max-width: 800px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 25px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #aaa;
+        }
+
+        .status {
+            border-left: 4px solid #d71919;
+            background: rgba(100, 0, 0, 0.16);
+            padding: 22px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        footer {
+            border-top: 1px solid #292929;
+            background: #050505;
+            text-align: center;
+            padding: 35px 20px;
+            color: #777;
+        }
+
+        footer a {
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        @media (max-width: 650px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <div class="logo">LURK<span>VR</span></div>
+
+        <div>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#status">Status</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="hero-content">
+
+            <div class="warning">
+                VR HORROR EXPERIENCE
+            </div>
+
+            <h1>LURK<span>VR</span></h1>
+
+            <p>
+                Something is lurking inside.
+                Explore a mysterious research facility,
+                uncover its secrets, and find out what happened.
+            </p>
+
+            <div class="button-row">
+                <a class="button" href="#about">Explore LurkVR</a>
+
+                <a class="button secondary" href="privacy.html">
+                    Privacy Policy
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="about">
+
+        <h2 class="section-title">
+            About <span>LurkVR</span>
+        </h2>
+
+        <p class="description">
+            LurkVR is a virtual reality horror game developed by RiflePulse.
+            The game takes place inside a mysterious research facility filled
+            with strange locations, unexplained events, and things that may
+            not want you there.
+        </p>
+
+        <p class="description" style="margin-top: 20px;">
+            Explore the facility, investigate what happened, and survive
+            whatever is waiting in the darkness.
+        </p>
+
+    </section>
+
+    <section id="features">
+
+        <h2 class="section-title">
+            Features
+        </h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>VR Locomotion</h3>
+                <p>
+                    Physical VR movement designed around immersive
+                    hand-based movement.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Research Facility</h3>
+                <p>
+                    Explore a mysterious facility containing different
+                    environments and hidden areas.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Horror Events</h3>
+                <p>
+                    Unexpected events and encounters can change the
+                    atmosphere around you.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Exploration</h3>
+                <p>
+                    Search the facility, discover secrets and uncover
+                    more of the LurkVR world.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="status">
+
+        <h2 class="section-title">
+            Development <span>Status</span>
+        </h2>
+
+        <div class="status">
+            <strong>LurkVR is currently in development.</strong>
+
+            <p style="margin-top: 10px; color: #bbb;">
+                The game is actively being developed. Features,
+                environments and content may change before release.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <p>
+        © 2026 RiflePulse. All rights reserved.
+    </p>
+
+    <p style="margin-top: 10px;">
+        <a href="privacy.html">Privacy Policy</a>
+    </p>
+
+</footer>
+
+</body>
+</html>
