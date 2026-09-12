@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>LurkVR | Official Website</title>
+    <title>LurkVR | The Paradox</title>
 
     <meta name="description"
-          content="LurkVR is a VR horror game set inside a mysterious research facility.">
+          content="LurkVR is a VR horror experience currently in beta testing. Enter the Paradox and discover what lies beyond the redacted facility.">
 
     <style>
         * {
@@ -22,48 +22,45 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
+            color: #eee;
             background:
-                radial-gradient(circle at top, #321010 0%, #120707 35%, #050505 75%);
-            color: #f1f1f1;
-            min-height: 100vh;
-            line-height: 1.6;
+                radial-gradient(circle at 50% 0%, #3b0909 0%, #130303 32%, #050505 75%);
+            line-height: 1.7;
         }
 
         header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(5, 5, 5, 0.92);
-            border-bottom: 1px solid #3a1515;
-            backdrop-filter: blur(10px);
+            background: rgba(3, 3, 3, 0.92);
+            border-bottom: 1px solid #4a1111;
+            backdrop-filter: blur(12px);
         }
 
         nav {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: auto;
-            padding: 18px 24px;
+            padding: 18px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
         }
 
-        .logo {
-            font-size: 25px;
+        .brand {
+            font-size: 24px;
             font-weight: 900;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
         }
 
-        .logo span,
-        h1 span,
-        .section-title span {
+        .brand span {
             color: #d71919;
         }
 
         nav a {
-            color: #cccccc;
+            color: #aaa;
             text-decoration: none;
-            margin-left: 20px;
+            margin-left: 22px;
+            font-size: 14px;
         }
 
         nav a:hover {
@@ -71,63 +68,105 @@
         }
 
         .hero {
-            min-height: 75vh;
+            min-height: 90vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-align: center;
             padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,255,255,0.015) 0px,
+                    rgba(255,255,255,0.015) 1px,
+                    transparent 1px,
+                    transparent 4px
+                );
+            pointer-events: none;
         }
 
         .hero-content {
-            max-width: 850px;
+            position: relative;
+            max-width: 900px;
         }
 
-        .warning {
+        .game-icon {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 25px;
+            border: 2px solid #641414;
+            box-shadow:
+                0 0 20px rgba(180, 0, 0, 0.35),
+                0 0 70px rgba(100, 0, 0, 0.2);
+            margin-bottom: 28px;
+        }
+
+        .beta {
             display: inline-block;
-            border: 1px solid #8d2020;
-            background: rgba(100, 0, 0, 0.25);
-            color: #ff6666;
-            padding: 7px 14px;
+            padding: 7px 16px;
+            border: 1px solid #a51b1b;
+            background: rgba(100, 0, 0, 0.3);
+            color: #ff5a5a;
             border-radius: 999px;
-            font-size: 13px;
-            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
             margin-bottom: 25px;
         }
 
         h1 {
-            font-size: clamp(55px, 11vw, 120px);
-            line-height: 0.9;
-            letter-spacing: 8px;
-            margin-bottom: 25px;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.25);
+            font-size: clamp(55px, 12vw, 125px);
+            line-height: .85;
+            letter-spacing: 10px;
+            text-shadow: 0 0 35px rgba(255, 0, 0, .22);
         }
 
-        .hero p {
-            max-width: 700px;
-            margin: auto;
+        h1 span {
+            color: #d71919;
+        }
+
+        .tagline {
+            margin: 30px auto 0;
+            max-width: 800px;
             color: #c7c7c7;
-            font-size: 19px;
+            font-size: 20px;
+            font-style: italic;
         }
 
-        .button-row {
+        .redacted {
+            color: #777;
+            letter-spacing: 3px;
+        }
+
+        .buttons {
             margin-top: 35px;
         }
 
         .button {
             display: inline-block;
-            padding: 13px 25px;
             margin: 6px;
-            border-radius: 7px;
+            padding: 13px 25px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
-            border: 1px solid #8f2020;
             color: white;
-            background: #a41414;
+            background: #a31313;
+            border: 1px solid #d12626;
+            transition: .2s;
         }
 
         .button:hover {
             background: #d51d1d;
+            transform: translateY(-2px);
         }
 
         .button.secondary {
@@ -136,20 +175,24 @@
         }
 
         section {
-            max-width: 1000px;
+            max-width: 1050px;
             margin: auto;
-            padding: 80px 24px;
+            padding: 90px 25px;
         }
 
         .section-title {
-            font-size: 38px;
+            font-size: 40px;
             margin-bottom: 20px;
         }
 
+        .section-title span {
+            color: #d71919;
+        }
+
         .description {
-            color: #c0c0c0;
+            max-width: 850px;
+            color: #bdbdbd;
             font-size: 17px;
-            max-width: 800px;
         }
 
         .cards {
@@ -160,10 +203,14 @@
         }
 
         .card {
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(18, 18, 18, .9);
             border: 1px solid #333;
             border-radius: 10px;
             padding: 25px;
+        }
+
+        .card:hover {
+            border-color: #791515;
         }
 
         .card h3 {
@@ -171,23 +218,41 @@
         }
 
         .card p {
-            color: #aaa;
+            color: #999;
         }
 
         .status {
-            border-left: 4px solid #d71919;
-            background: rgba(100, 0, 0, 0.16);
-            padding: 22px;
             margin-top: 30px;
+            padding: 25px;
+            border-left: 4px solid #d71919;
+            background: rgba(100, 0, 0, .15);
             border-radius: 5px;
+        }
+
+        .status strong {
+            color: #ff4a4a;
+            font-size: 20px;
+        }
+
+        .classified {
+            margin-top: 30px;
+            padding: 25px;
+            background: #080808;
+            border: 1px solid #252525;
+            font-family: monospace;
+            color: #777;
+        }
+
+        .classified .red {
+            color: #a61919;
         }
 
         footer {
             border-top: 1px solid #292929;
-            background: #050505;
+            background: #030303;
             text-align: center;
-            padding: 35px 20px;
-            color: #777;
+            padding: 40px 20px;
+            color: #666;
         }
 
         footer a {
@@ -195,13 +260,23 @@
             text-decoration: none;
         }
 
-        @media (max-width: 650px) {
+        @media (max-width: 700px) {
             nav {
                 flex-direction: column;
+                gap: 12px;
             }
 
             nav a {
                 margin: 0 8px;
+            }
+
+            .game-icon {
+                width: 120px;
+                height: 120px;
+            }
+
+            .tagline {
+                font-size: 17px;
             }
         }
     </style>
@@ -211,13 +286,15 @@
 
 <header>
     <nav>
-        <div class="logo">LURK<span>VR</span></div>
+        <div class="brand">
+            LURK<span>VR</span>
+        </div>
 
         <div>
-            <a href="#about">About</a>
-            <a href="#features">Features</a>
-            <a href="#status">Status</a>
-            <a href="privacy.html">Privacy</a>
+            <a href="#about">ABOUT</a>
+            <a href="#features">FEATURES</a>
+            <a href="#status">BETA</a>
+            <a href="privacy.html">PRIVACY</a>
         </div>
     </nav>
 </header>
@@ -225,55 +302,75 @@
 <main>
 
     <section class="hero">
+
         <div class="hero-content">
 
-            <div class="warning">
-                VR HORROR EXPERIENCE
+            <img
+                src="icon.png"
+                alt="LurkVR game icon"
+                class="game-icon"
+            >
+
+            <div class="beta">
+                CURRENTLY IN BETA TESTING
             </div>
 
-            <h1>LURK<span>VR</span></h1>
+            <h1>
+                LURK<span>VR</span>
+            </h1>
 
-            <p>
-                Something is lurking inside.
-                Explore a mysterious research facility,
-                uncover its secrets, and find out what happened.
+            <p class="tagline">
+                The Dread of fear that the Holy Crucifix will bring
+                to the creatures in the "PARADOX"
+                <span class="redacted">[REDACTED]</span>
             </p>
 
-            <div class="button-row">
-                <a class="button" href="#about">Explore LurkVR</a>
+            <div class="buttons">
+                <a class="button" href="#about">
+                    ENTER THE PARADOX
+                </a>
 
                 <a class="button secondary" href="privacy.html">
-                    Privacy Policy
+                    PRIVACY POLICY
                 </a>
             </div>
 
         </div>
+
     </section>
+
 
     <section id="about">
 
         <h2 class="section-title">
-            About <span>LurkVR</span>
+            THE <span>PARADOX</span>
         </h2>
 
         <p class="description">
-            LurkVR is a virtual reality horror game developed by RiflePulse.
-            The game takes place inside a mysterious research facility filled
-            with strange locations, unexplained events, and things that may
-            not want you there.
+            LurkVR is a virtual reality horror experience set inside
+            a mysterious research facility. Something about the facility
+            does not behave the way it should.
         </p>
 
-        <p class="description" style="margin-top: 20px;">
-            Explore the facility, investigate what happened, and survive
-            whatever is waiting in the darkness.
+        <p class="description" style="margin-top:20px;">
+            Explore strange environments, investigate what happened,
+            and uncover the secrets hidden within the Paradox.
         </p>
+
+        <div class="classified">
+            PROJECT: LURKVR<br>
+            LOCATION: <span class="red">[REDACTED]</span><br>
+            STATUS: <span class="red">ACTIVE</span><br>
+            ACCESS LEVEL: <span class="red">UNKNOWN</span>
+        </div>
 
     </section>
+
 
     <section id="features">
 
         <h2 class="section-title">
-            Features
+            WHAT <span>AWAITS</span>
         </h2>
 
         <div class="cards">
@@ -282,31 +379,31 @@
                 <h3>VR Locomotion</h3>
                 <p>
                     Physical VR movement designed around immersive
-                    hand-based movement.
+                    hand-based interaction.
                 </p>
             </div>
 
             <div class="card">
-                <h3>Research Facility</h3>
+                <h3>The Facility</h3>
                 <p>
-                    Explore a mysterious facility containing different
-                    environments and hidden areas.
+                    Explore laboratories, strange rooms and areas
+                    hidden throughout the facility.
                 </p>
             </div>
 
             <div class="card">
                 <h3>Horror Events</h3>
                 <p>
-                    Unexpected events and encounters can change the
-                    atmosphere around you.
+                    Unpredictable events can transform the environment
+                    around you.
                 </p>
             </div>
 
             <div class="card">
-                <h3>Exploration</h3>
+                <h3>The Paradox</h3>
                 <p>
-                    Search the facility, discover secrets and uncover
-                    more of the LurkVR world.
+                    Something is wrong with the facility. The deeper
+                    you explore, the less reality makes sense.
                 </p>
             </div>
 
@@ -314,32 +411,38 @@
 
     </section>
 
+
     <section id="status">
 
         <h2 class="section-title">
-            Development <span>Status</span>
+            DEVELOPMENT <span>STATUS</span>
         </h2>
 
         <div class="status">
-            <strong>LurkVR is currently in development.</strong>
 
-            <p style="margin-top: 10px; color: #bbb;">
-                The game is actively being developed. Features,
-                environments and content may change before release.
+            <strong>🧪 BETA TESTING</strong>
+
+            <p style="margin-top:12px; color:#bbb;">
+                LurkVR is currently in beta testing and is still actively
+                being developed. Maps, gameplay, creatures, environments,
+                mechanics and other features may change before the final
+                release.
             </p>
+
         </div>
 
     </section>
 
 </main>
 
+
 <footer>
 
     <p>
-        © 2026 RiflePulse. All rights reserved.
+        © 2026 RiflePulse — LurkVR
     </p>
 
-    <p style="margin-top: 10px;">
+    <p style="margin-top:10px;">
         <a href="privacy.html">Privacy Policy</a>
     </p>
 
