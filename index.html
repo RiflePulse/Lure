@@ -1,990 +1,1859 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>L.U.R.E — RDT</title>
-
-    <meta name="description"
-          content="L.U.R.E — A VR horror experience developed by RDT — RiflePulse Development Team. Currently in beta testing.">
-
-    <style>
-
-        /* =========================
-           GLOBAL
-        ========================= */
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background:
-                radial-gradient(circle at 50% 0%, #420000 0%, #120000 25%, #050505 65%);
-            color: #eeeeee;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 999;
-            background:
-                repeating-linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0.025) 0px,
-                    rgba(255,255,255,0.025) 1px,
-                    transparent 2px,
-                    transparent 5px
-                );
-            opacity: 0.35;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 998;
-            box-shadow:
-                inset 0 0 180px #000000,
-                inset 0 0 50px rgba(255,0,0,0.15);
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 25px;
-
-            padding: 17px;
-
-            background: rgba(5, 0, 0, 0.92);
-            border-bottom: 1px solid #6d0000;
-            backdrop-filter: blur(10px);
-        }
-
-        nav a {
-            color: #bbbbbb;
-            font-size: 13px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            transition: 0.2s;
-        }
-
-        nav a:hover {
-            color: #ff2020;
-            text-shadow: 0 0 12px #ff0000;
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            position: relative;
-            min-height: 850px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-
-            overflow: hidden;
-            padding: 100px 20px;
-        }
-
-        /* Blurred cover art */
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: -35px;
-
-            background-image:
-                linear-gradient(
-                    rgba(0,0,0,0.42),
-                    rgba(0,0,0,0.78)
-                ),
-                url("cover.jpg");
-
-            background-size: cover;
-            background-position: center;
-
-            filter: blur(9px);
-            transform: scale(1.08);
-
-            opacity: 0.78;
-            z-index: -3;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    transparent 15%,
-                    rgba(0,0,0,0.45) 55%,
-                    #020202 100%
-                );
-
-            z-index: -2;
-        }
-
-        .hero-content {
-            max-width: 950px;
-        }
-
-        .classified {
-            display: inline-block;
-
-            padding: 9px 18px;
-            margin-bottom: 25px;
-
-            color: #ff3030;
-            border: 1px solid #a00000;
-            background: rgba(30,0,0,0.65);
-
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 3px;
-
-            box-shadow:
-                0 0 20px rgba(255,0,0,0.15);
-
-            animation: flicker 4s infinite;
-        }
-
-        .logo {
-            width: 130px;
-            height: 130px;
-            object-fit: cover;
-
-            border: 2px solid #850000;
-            box-shadow:
-                0 0 25px rgba(255,0,0,0.35);
-
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            font-size: clamp(60px, 12vw, 150px);
-            letter-spacing: 15px;
-            color: #ffffff;
-
-            text-shadow:
-                5px 0 #6d0000,
-                -3px 0 #250000,
-                0 0 30px rgba(255,0,0,0.5);
-
-            animation: titleGlitch 5s infinite;
-        }
-
-        .subtitle {
-            margin-top: 15px;
-
-            color: #ff3030;
-            font-size: clamp(14px, 2vw, 20px);
-            font-weight: bold;
-            letter-spacing: 4px;
-        }
-
-        .description {
-            max-width: 700px;
-            margin: 25px auto;
-
-            color: #cfcfcf;
-            line-height: 1.8;
-            font-size: 16px;
-        }
-
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 35px;
-        }
-
-        .button {
-            display: inline-block;
-
-            padding: 15px 25px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #170000,
-                    #390000
-                );
-
-            border: 1px solid #9c0000;
-
-            color: #ffffff;
-
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
-
-            transition: 0.25s;
-
-            box-shadow:
-                0 0 15px rgba(255,0,0,0.12);
-        }
-
-        .button:hover {
-            background: #a00000;
-            border-color: #ff4040;
-
-            transform: translateY(-3px);
-
-            box-shadow:
-                0 0 25px rgba(255,0,0,0.45);
-        }
-
-        .button.primary {
-            background: #8b0000;
-        }
-
-        /* =========================
-           SECTIONS
-        ========================= */
-
-        section {
-            padding: 110px 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .section-title {
-            color: #ff2020;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 4px;
-            margin-bottom: 15px;
-        }
-
-        h2 {
-            font-size: clamp(35px, 6vw, 65px);
-            margin-bottom: 25px;
-            letter-spacing: 4px;
-        }
-
-        p {
-            color: #bdbdbd;
-            line-height: 1.8;
-        }
-
-        /* =========================
-           CLASSIFIED BOX
-        ========================= */
-
-        .classified-box {
-            margin-top: 40px;
-
-            padding: 30px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(70,0,0,0.3),
-                    rgba(0,0,0,0.8)
-                );
-
-            border: 1px solid #560000;
-
-            box-shadow:
-                inset 0 0 30px rgba(255,0,0,0.05),
-                0 0 30px rgba(0,0,0,0.5);
-        }
-
-        .classified-box div {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-
-            padding: 13px 0;
-
-            border-bottom: 1px solid #260000;
-        }
-
-        .classified-box div:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            color: #777777;
-            letter-spacing: 2px;
-            font-size: 12px;
-        }
-
-        .value {
-            color: #ff3030;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        /* =========================
-           FEATURES
-        ========================= */
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-            margin-top: 45px;
-        }
-
-        .feature {
-            padding: 30px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(50,0,0,0.55),
-                    rgba(10,10,10,0.9)
-                );
-
-            border: 1px solid #3c0000;
-
-            transition: 0.25s;
-        }
-
-        .feature:hover {
-            border-color: #a00000;
-            transform: translateY(-6px);
-
-            box-shadow:
-                0 0 30px rgba(255,0,0,0.12);
-        }
-
-        .feature h3 {
-            color: #ff4040;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-
-        /* =========================
-           BETA
-        ========================= */
-
-        .beta {
-            text-align: center;
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(130,0,0,0.22),
-                    transparent 65%
-                );
-        }
-
-        .beta-warning {
-            display: inline-block;
-
-            padding: 13px 25px;
-
-            margin-bottom: 25px;
-
-            color: #ffffff;
-
-            background: #760000;
-
-            border: 1px solid #ff3030;
-
-            font-weight: bold;
-            letter-spacing: 3px;
-
-            box-shadow:
-                0 0 30px rgba(255,0,0,0.3);
-
-            animation: warningPulse 2s infinite;
-        }
-
-        /* =========================
-           SECOND IMAGE
-        ========================= */
-
-        .bottom-art {
-            width: 100%;
-            max-width: 850px;
-
-            display: block;
-
-            margin: 20px auto 60px;
-
-            border: 1px solid #690000;
-
-            box-shadow:
-                0 0 40px rgba(255,0,0,0.2);
-
-            filter:
-                grayscale(15%)
-                contrast(1.15)
-                brightness(0.75);
-
-            transition: 0.3s;
-        }
-
-        .bottom-art:hover {
-            filter:
-                grayscale(0%)
-                contrast(1.2)
-                brightness(0.9);
-
-            box-shadow:
-                0 0 55px rgba(255,0,0,0.35);
-        }
-
-        /* =========================
-           DEVELOPER SECTION
-        ========================= */
-
-        .developer {
-            text-align: center;
-
-            border-top: 1px solid #250000;
-        }
-
-        .developer-box {
-            max-width: 850px;
-            margin: 35px auto 0;
-
-            padding: 40px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(60,0,0,0.35),
-                    rgba(0,0,0,0.8)
-                );
-
-            border: 1px solid #500000;
-        }
-
-        .developer-box h3 {
-            color: #ff3030;
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        footer {
-            text-align: center;
-
-            padding: 50px 20px;
-
-            background: #020202;
-
-            border-top: 1px solid #3c0000;
-        }
-
-        footer strong {
-            color: #ff2020;
-        }
-
-        footer p {
-            font-size: 12px;
-            margin-top: 10px;
-            color: #666666;
-        }
-
-        /* =========================
-           ANIMATIONS
-        ========================= */
-
-        @keyframes warningPulse {
-
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(255,0,0,0.2);
-            }
-
-            50% {
-                box-shadow: 0 0 35px rgba(255,0,0,0.55);
-            }
-        }
-
-        @keyframes flicker {
-
-            0%, 90%, 100% {
-                opacity: 1;
-            }
-
-            91% {
-                opacity: 0.3;
-            }
-
-            92% {
-                opacity: 1;
-            }
-
-            94% {
-                opacity: 0.5;
-            }
-
-            95% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes titleGlitch {
-
-            0%, 93%, 100% {
-                transform: translateX(0);
-            }
-
-            94% {
-                transform: translateX(3px);
-            }
-
-            95% {
-                transform: translateX(-3px);
-            }
-
-            96% {
-                transform: translateX(0);
-            }
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 600px) {
-
-            nav {
-                gap: 12px;
-            }
-
-            nav a {
-                font-size: 10px;
-            }
-
-            .hero {
-                min-height: 720px;
-            }
-
-            h1 {
-                letter-spacing: 7px;
-            }
-
-            .classified-box div {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .value {
-                text-align: left;
-            }
-
-            section {
-                padding: 80px 18px;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="L.U.R.E — a VR horror experience by RiflePulse Development Team.">
+<meta name="theme-color" content="#050505">
+<title>L.U.R.E — THE PARADOX</title>
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+:root {
+  --black: #020202;
+  --black2: #070707;
+  --panel: #0b0b0b;
+  --panel2: #110909;
+  --red: #ff1616;
+  --red2: #a50000;
+  --red3: #4d0000;
+  --white: #f5f5f5;
+  --grey: #a3a3a3;
+  --darkgrey: #4f4f4f;
+  --line: rgba(255, 22, 22, 0.28);
+  --glow: rgba(255, 0, 0, 0.22);
+  --discord: #5865f2;
+  --max: 1250px;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+  background: var(--black);
+}
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, #360000 0%, transparent 42%),
+    radial-gradient(circle at 0% 50%, #180000 0%, transparent 35%),
+    radial-gradient(circle at 100% 70%, #160000 0%, transparent 35%),
+    var(--black);
+  color: var(--white);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.025) 0,
+    rgba(255,255,255,0.025) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.3;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  box-shadow: inset 0 0 180px rgba(0,0,0,0.85);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+}
+button {
+  font: inherit;
+}
+.container {
+  width: min(var(--max), 90%);
+  margin: 0 auto;
+}
+.hidden {
+  display: none !important;
+}
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  border-bottom: 1px solid var(--line);
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(14px);
+}
+.nav-inner {
+  width: min(var(--max), 92%);
+  min-height: 74px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+.brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px var(--glow));
+}
+.brand-text {
+  white-space: nowrap;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.nav-links a {
+  color: #bcbcbc;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  transition: 0.2s ease;
+}
+.nav-links a:hover {
+  color: var(--red);
+  text-shadow: 0 0 12px var(--glow);
+}
+.nav-toggle {
+  display: none;
+  border: 1px solid var(--line);
+  background: #090000;
+  color: var(--white);
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  padding: 100px 20px;
+}
+.hero-bg {
+  position: absolute;
+  inset: -20px;
+  background:
+    linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.88)),
+    url("cover.jpg") center / cover no-repeat;
+  filter: blur(4px);
+  transform: scale(1.06);
+  opacity: 0.78;
+}
+.hero-red {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      transparent 0,
+      rgba(0,0,0,0.25) 35%,
+      rgba(0,0,0,0.92) 100%
+    );
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(1000px, 100%);
+}
+.hero-icon {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  margin: 0 auto 26px;
+  filter:
+    drop-shadow(0 0 14px rgba(255,0,0,0.7))
+    drop-shadow(0 0 50px rgba(255,0,0,0.25));
+}
+.hero-kicker {
+  color: #ff3a3a;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+}
+.hero-title {
+  font-size: clamp(70px, 14vw, 175px);
+  line-height: 0.9;
+  font-weight: 1000;
+  letter-spacing: 15px;
+  color: #fff;
+  text-shadow:
+    4px 0 #ff0000,
+    -4px 0 #430000,
+    0 0 38px rgba(255,0,0,0.55);
+  animation: titleGlitch 5s infinite;
+}
+@keyframes titleGlitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+  }
+  91% {
+    transform: translate(-5px, 2px);
+  }
+  92% {
+    transform: translate(5px, -2px);
+  }
+  93% {
+    transform: translate(-2px, 0);
+  }
+}
+.hero-subtitle {
+  margin-top: 18px;
+  color: #ff2424;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 6px;
+}
+.hero-description {
+  max-width: 780px;
+  margin: 28px auto 34px;
+  color: #d0d0d0;
+  font-size: 17px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  margin-bottom: 25px;
+  border: 1px solid var(--red);
+  background: rgba(70,0,0,0.35);
+  color: #ff5a5a;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff1b1b;
+  box-shadow: 0 0 14px #ff0000;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 13px 21px;
+  border: 1px solid var(--red);
+  background: rgba(0,0,0,0.72);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  background: #210000;
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.18),
+    inset 0 0 18px rgba(255,0,0,0.08);
+}
+.btn-red {
+  background: var(--red);
+  color: #090000;
+}
+.btn-red:hover {
+  background: #ff4545;
+  color: #000;
+}
+.btn-dark {
+  background: #080808;
+  color: #ddd;
+}
+.btn-discord {
+  border-color: var(--discord);
+  color: #dfe2ff;
+  background: rgba(88,101,242,0.12);
+}
+.btn-discord:hover {
+  background: rgba(88,101,242,0.28);
+  box-shadow: 0 0 20px rgba(88,101,242,0.2);
+}
+.btn-wide {
+  min-width: 220px;
+}
+.button-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+section {
+  position: relative;
+  padding: 105px 0;
+  border-top: 1px solid rgba(255,0,0,0.12);
+}
+.section-head {
+  margin-bottom: 45px;
+}
+.section-kicker {
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: clamp(34px, 5vw, 62px);
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 2px 0 var(--red);
+}
+.section-title span {
+  color: var(--red);
+}
+.section-lead {
+  max-width: 850px;
+  margin-top: 18px;
+  color: #a9a9a9;
+  font-size: 16px;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.panel {
+  padding: 30px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(45,0,0,0.65),
+      rgba(7,7,7,0.94)
+    );
+  transition: 0.25s ease;
+}
+.panel:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255,0,0,0.7);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.55);
+}
+.panel-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  color: var(--red);
+  font-weight: 900;
+}
+.panel h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.panel p {
+  color: #929292;
+  font-size: 14px;
+}
+.facility {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(50,0,0,0.15),
+      transparent 40%,
+      rgba(50,0,0,0.15)
+    );
+}
+.facility-box {
+  padding: 42px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(100,0,0,0.3),
+      rgba(0,0,0,0.92) 68%
+    );
+}
+.facility-box p {
+  max-width: 900px;
+  color: #a8a8a8;
+  font-size: 16px;
+}
+.facility-warning {
+  margin-top: 25px;
+  padding: 16px 20px;
+  border-left: 3px solid var(--red);
+  background: rgba(255,0,0,0.04);
+  color: #bcbcbc;
+  font-size: 13px;
+}
+.progression {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: 35px;
+}
+.location {
+  min-height: 145px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #292929;
+  background: #070707;
+  transition: 0.25s ease;
+}
+.location:hover {
+  border-color: var(--red);
+  background: #170000;
+}
+.location-number {
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 9px;
+}
+.location-name {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.file-card {
+  position: relative;
+  padding: 28px;
+  border: 1px solid rgba(255,0,0,0.2);
+  border-left: 3px solid var(--red);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(70,0,0,0.38),
+      rgba(0,0,0,0.75)
+    );
+}
+.file-label {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin-bottom: 7px;
+}
+.file-card h3 {
+  margin-bottom: 9px;
+  font-size: 17px;
+}
+.file-card p {
+  color: #929292;
+  font-size: 14px;
+}
+.trailer {
+  text-align: center;
+}
+.trailer-frame {
+  position: relative;
+  width: min(1000px, 100%);
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 30px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at center, #290000, #050505 70%);
+}
+.trailer-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #777;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.trailer-note {
+  color: #777;
+  font-size: 13px;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #050505;
+}
+.gallery-item img {
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+.gallery-item:hover img {
+  transform: scale(1.03);
+  filter: brightness(1.12);
+}
+.gallery-caption {
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+  background: #070707;
+  color: #999;
+  font-size: 12px;
+}
+.character-section {
+  text-align: center;
+}
+.character-image {
+  width: min(700px, 100%);
+  max-height: 720px;
+  object-fit: contain;
+  margin: 0 auto 30px;
+  border: 1px solid var(--line);
+  box-shadow: 0 0 50px rgba(255,0,0,0.1);
+}
+.character-copy {
+  width: min(800px, 100%);
+  margin: 0 auto;
+  color: #9b9b9b;
+}
+.beta {
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(90,0,0,0.34),
+      transparent 68%
+    );
+}
+.beta-box {
+  padding: 55px 30px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,0.35);
+}
+.beta-status {
+  display: inline-block;
+  padding: 9px 16px;
+  margin-bottom: 22px;
+  border: 1px solid var(--red);
+  color: #ff4b4b;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+.beta-box h2 {
+  font-size: clamp(32px, 5vw, 60px);
+  margin-bottom: 15px;
+}
+.beta-box p {
+  width: min(750px, 100%);
+  margin: 0 auto 28px;
+  color: #999;
+}
+.rdt-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  padding: 40px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(40,0,0,0.38),
+      rgba(0,0,0,0.85)
+    );
+}
+.rdt-mark {
+  color: var(--red);
+  font-size: 45px;
+  font-weight: 1000;
+  letter-spacing: 5px;
+}
+.rdt-name {
+  margin-top: 4px;
+  color: #ddd;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.rdt-copy {
+  color: #999;
+  font-size: 14px;
+}
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 14px;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 20px;
+  padding: 22px;
+  border: 1px solid #242424;
+  background: #070707;
+}
+.timeline-date {
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+.timeline-content h3 {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.timeline-content p {
+  color: #8e8e8e;
+  font-size: 13px;
+}
+.faq {
+  display: grid;
+  gap: 12px;
+}
+.faq-item {
+  border: 1px solid #292929;
+  background: #070707;
+}
+.faq-question {
+  width: 100%;
+  padding: 20px;
+  border: 0;
+  background: transparent;
+  color: #eee;
+  text-align: left;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.faq-question span {
+  color: var(--red);
+  font-size: 20px;
+}
+.faq-answer {
+  display: none;
+  padding: 0 20px 20px;
+  color: #8f8f8f;
+  font-size: 14px;
+}
+.faq-item.open .faq-answer {
+  display: block;
+}
+.link-hub {
+  text-align: center;
+}
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 30px;
+}
+.link-slot {
+  min-height: 105px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #292929;
+  background: #080808;
+  transition: 0.2s ease;
+}
+.link-slot:hover {
+  border-color: var(--red);
+  background: #140000;
+}
+.link-slot strong {
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.link-slot small {
+  margin-top: 5px;
+  color: #666;
+  font-size: 10px;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.news-card {
+  padding: 25px;
+  border: 1px solid #272727;
+  background: #070707;
+}
+.news-date {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+.news-card h3 {
+  margin: 10px 0;
+  font-size: 17px;
+}
+.news-card p {
+  color: #8c8c8c;
+  font-size: 13px;
+}
+.cta {
+  text-align: center;
+}
+.cta-box {
+  padding: 60px 25px;
+  border: 1px solid var(--red);
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(80,0,0,0.35),
+      rgba(0,0,0,0.8)
+    );
+}
+.cta-box h2 {
+  font-size: clamp(34px, 6vw, 72px);
+  line-height: 1;
+  margin-bottom: 18px;
+}
+.cta-box p {
+  width: min(700px, 100%);
+  margin: 0 auto 28px;
+  color: #999;
+}
+footer {
+  padding: 45px 0;
+  border-top: 1px solid var(--line);
+  background: #020202;
+}
+.footer-inner {
+  width: min(var(--max), 90%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 30px;
+  align-items: center;
+}
+.footer-brand {
+  font-weight: 1000;
+  letter-spacing: 3px;
+}
+.footer-copy {
+  margin-top: 6px;
+  color: #666;
+  font-size: 12px;
+}
+.footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.footer-links a {
+  color: #888;
+  font-size: 11px;
+  font-weight: 800;
+}
+.footer-links a:hover {
+  color: var(--red);
+}
+.red-line {
+  width: 90px;
+  height: 2px;
+  margin: 18px 0;
+  background: var(--red);
+  box-shadow: 0 0 12px var(--glow);
+}
+.center-line {
+  margin-left: auto;
+  margin-right: auto;
+}
+.scan-box {
+  position: relative;
+  overflow: hidden;
+}
+.scan-box::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  top: -4px;
+  background: rgba(255,0,0,0.5);
+  box-shadow: 0 0 15px rgba(255,0,0,0.5);
+  animation: scan 5s linear infinite;
+}
+@keyframes scan {
+  0% {
+    top: -4px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+@media (max-width: 1050px) {
+  .progression {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .link-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 850px) {
+  .nav-inner {
+    min-height: 64px;
+  }
+  .nav-toggle {
+    display: block;
+  }
+  .nav-links {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 64px;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 5%;
+    border-bottom: 1px solid var(--line);
+    background: rgba(0,0,0,0.97);
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-links a {
+    padding: 13px 5px;
+  }
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  .rdt-box {
+    grid-template-columns: 1fr;
+  }
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+  .files-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  section {
+    padding: 75px 0;
+  }
+  .hero {
+    min-height: 88vh;
+    padding: 80px 18px;
+  }
+  .hero-icon {
+    width: 95px;
+    height: 95px;
+  }
+  .hero-title {
+    letter-spacing: 7px;
+  }
+  .hero-subtitle {
+    letter-spacing: 3px;
+    font-size: 11px;
+  }
+  .hero-description {
+    font-size: 14px;
+  }
+  .facility-box {
+    padding: 25px;
+  }
+  .progression {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .link-grid {
+    grid-template-columns: 1fr;
+  }
+  .gallery-item img {
+    height: 240px;
+  }
+  .footer-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer-links {
+    justify-content: center;
+  }
+}
+</style>
 </head>
-
 <body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="icon.png" alt="L.U.R.E icon">
+      <span class="brand-text">L.U.R.E</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation" aria-expanded="false">MENU</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">ABOUT</a>
+      <a href="#facility">FACILITY</a>
+      <a href="#paradox">PARADOX</a>
+      <a href="#screenshots">SCREENSHOTS</a>
+      <a href="#beta">BETA</a>
+      <a href="#rdt">RDT</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+</nav>
 
-    <!-- =========================
-         NAVIGATION
-    ========================== -->
+<main id="top">
 
-    <nav>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-red"></div>
+  <div class="hero-content">
+    <img class="hero-icon" src="icon.png" alt="L.U.R.E">
+    <div class="hero-kicker">RIFLEPULSE DEVELOPMENT TEAM</div>
+    <h1 class="hero-title">L.U.R.E</h1>
+    <div class="hero-subtitle">THE PARADOX AWAITS</div>
+    <p class="hero-description">
+      A VR horror experience built around an abandoned research facility,
+      strange experiments, hidden areas, and a place where reality does not
+      always behave the way it should.
+    </p>
+    <div class="status">
+      <span class="status-dot"></span>
+      CURRENTLY IN BETA TESTING
+    </div>
+    <div class="hero-buttons">
+      <a class="btn btn-red btn-wide" href="https://www.meta.com/s/55McLhncS" target="_blank" rel="noopener noreferrer">ENTER THE BETA</a>
+      <a class="btn btn-dark btn-wide" href="#trailer">WATCH THE TRAILER</a>
+    </div>
+  </div>
+</section>
 
-        <a href="#about">ABOUT</a>
-        <a href="#paradox">PARADOX</a>
-        <a href="#features">FEATURES</a>
-        <a href="#beta">BETA</a>
-        <a href="#developers">DEVELOPERS</a>
-        <a href="privacy.html">PRIVACY</a>
-
-    </nav>
-
-
-    <!-- =========================
-         HERO
-    ========================== -->
-
-    <header class="hero">
-
-        <div class="hero-content">
-
-            <div class="classified">
-                RDT // CLASSIFIED PROJECT
-            </div>
-
-            <br>
-
-            <!-- Your L.U.R.E icon -->
-            <img
-                src="icon.png"
-                alt="L.U.R.E icon"
-                class="logo"
-            >
-
-            <h1>L.U.R.E</h1>
-
-            <div class="subtitle">
-                THE PARADOX IS WAITING.
-            </div>
-
-            <p class="description">
-                The Dread of fear that the Holy Crucifix will bring
-                to the creatures in the "PARADOX" [REDACTED].
-            </p>
-
-            <div class="buttons">
-
-                <a class="button primary" href="#paradox">
-                    ENTER THE PARADOX
-                </a>
-
-                <a class="button" href="privacy.html">
-                    PRIVACY POLICY
-                </a>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <!-- =========================
-         ABOUT
-    ========================== -->
-
-    <section id="about">
-
-        <div class="section-title">
-            001 // PROJECT FILE
-        </div>
-
-        <h2>WELCOME TO L.U.R.E</h2>
-
+<section id="about">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">PROJECT FILE 001</div>
+      <h2 class="section-title">WHAT IS <span>L.U.R.E?</span></h2>
+      <div class="red-line"></div>
+      <p class="section-lead">
+        L.U.R.E is a VR horror project from RiflePulse Development Team.
+        The project combines exploration, atmosphere, environmental
+        storytelling, and unsettling encounters inside a mysterious facility.
+      </p>
+    </div>
+    <div class="about-grid">
+      <article class="panel">
+        <div class="panel-icon">01</div>
+        <h3>EXPLORE</h3>
         <p>
-            L.U.R.E is a VR horror experience developed by
-            <strong>RDT — RiflePulse Development Team.</strong>
+          Move through different areas of the facility and uncover paths,
+          rooms, records, and clues that gradually reveal what happened.
         </p>
-
-        <br>
-
+      </article>
+      <article class="panel">
+        <div class="panel-icon">02</div>
+        <h3>SURVIVE</h3>
         <p>
-            You have entered a facility where the answers were
-            never meant to be found. Something happened here.
-            Something was discovered.
-            And whatever was discovered did not stay contained.
+          Stay alert as the facility changes around you. Sound, darkness,
+          restricted areas, and unexpected events are part of the experience.
         </p>
-
-        <div class="classified-box">
-
-            <div>
-                <span class="label">PROJECT</span>
-                <span class="value">L.U.R.E</span>
-            </div>
-
-            <div>
-                <span class="label">DEVELOPER</span>
-                <span class="value">RDT</span>
-            </div>
-
-            <div>
-                <span class="label">FULL NAME</span>
-                <span class="value">RIFLEPULSE DEVELOPMENT TEAM</span>
-            </div>
-
-            <div>
-                <span class="label">LOCATION</span>
-                <span class="value">[REDACTED]</span>
-            </div>
-
-            <div>
-                <span class="label">PROJECT STATUS</span>
-                <span class="value">ACTIVE</span>
-            </div>
-
-            <div>
-                <span class="label">TESTING STATUS</span>
-                <span class="value">BETA</span>
-            </div>
-
-            <div>
-                <span class="label">ACCESS LEVEL</span>
-                <span class="value">UNKNOWN</span>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         PARADOX
-    ========================== -->
-
-    <section id="paradox">
-
-        <div class="section-title">
-            002 // [REDACTED]
-        </div>
-
-        <h2>THE PARADOX</h2>
-
+      </article>
+      <article class="panel">
+        <div class="panel-icon">03</div>
+        <h3>DISCOVER</h3>
         <p>
-            The facility was built to study something that should
-            not exist. The deeper you travel, the less reliable
-            reality becomes.
+          Piece together the story of PARADOX through environmental details,
+          research files, locations, and discoveries hidden throughout L.U.R.E.
         </p>
-
-        <br>
-
-        <p>
-            Laboratories, abandoned rooms, underground areas and
-            restricted sections hide the remains of an experiment
-            that was never properly terminated.
-        </p>
-
-        <br>
-
-        <p>
-            There are things inside the facility that do not behave
-            the way they should.
-        </p>
-
-    </section>
-
-
-    <!-- =========================
-         FEATURES
-    ========================== -->
-
-    <section id="features">
-
-        <div class="section-title">
-            003 // SYSTEMS
-        </div>
-
-        <h2>FEATURES</h2>
-
-        <div class="features">
-
-            <div class="feature">
-
-                <h3>VR LOCOMOTION</h3>
-
-                <p>
-                    Immersive VR movement designed around physical
-                    interaction and hand-based movement.
-                </p>
-
-            </div>
-
-            <div class="feature">
-
-                <h3>THE FACILITY</h3>
-
-                <p>
-                    Explore a mysterious research facility containing
-                    laboratories, restricted areas and hidden locations.
-                </p>
-
-            </div>
-
-            <div class="feature">
-
-                <h3>ATMOSPHERIC HORROR</h3>
-
-                <p>
-                    Dark environments, strange sounds, lighting events
-                    and unpredictable encounters.
-                </p>
-
-            </div>
-
-            <div class="feature">
-
-                <h3>THE PARADOX</h3>
-
-                <p>
-                    Something has gone wrong with the facility.
-                    The further you go, the stranger everything becomes.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         BETA
-    ========================== -->
-
-    <section id="beta" class="beta">
-
-        <div class="section-title">
-            004 // ACCESS
-        </div>
-
-        <div class="beta-warning">
-            ⚠ L.U.R.E IS CURRENTLY IN BETA TESTING ⚠
-        </div>
-
-        <h2>BETA TESTING</h2>
-
-        <p>
-            L.U.R.E is currently being tested and developed.
-            Features, environments and gameplay systems may change
-            during development.
-        </p>
-
-        <br>
-
-        <p>
-            Want to help test the facility?
-        </p>
-
-        <div class="buttons">
-
-            <a
-                class="button primary"
-                href="https://www.meta.com/s/59TebQ2CE"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                BECOME A BETA TESTER
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         BOTTOM ART
-    ========================== -->
-
-    <section>
-
-        <img
-            src="lure-character.jpg"
-            alt="L.U.R.E classified character artwork"
-            class="bottom-art"
-        >
-
-    </section>
-
-
-    <!-- =========================
-         DEVELOPERS
-    ========================== -->
-
-    <section id="developers" class="developer">
-
-        <div class="section-title">
-            005 // RDT
-        </div>
-
-        <h2>DEVELOPMENT TEAM</h2>
-
-        <div class="developer-box">
-
-            <h3>RDT — RIFLEPULSE DEVELOPMENT TEAM</h3>
-
-            <p>
-                RDT stands for
-                <strong>RiflePulse Development Team.</strong>
-            </p>
-
-            <br>
-
-            <p>
-                We are the development team behind L.U.R.E,
-                working on programming, environments, VR systems,
-                monsters, atmosphere and future updates.
-            </p>
-
-            <br>
-
-            <p>
-                Think you have what it takes to enter the project?
-            </p>
-
-            <div class="buttons">
-
-                <a
-                    class="button primary"
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSf6jsT2vzMuZp_b-h-m7ARroZ7fqv-zqnQsSCUne7r8I8uQUA/viewform?usp=publish-editor"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    BECOME A DEVELOPER
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer>
-
-        <strong>RDT — RIFLEPULSE DEVELOPMENT TEAM</strong>
-
-        <p>
-            L.U.R.E © 2026 RDT. All rights reserved.
-        </p>
-
-        <p>
-            <a href="privacy.html">Privacy Policy</a>
-        </p>
-
-    </footer>
-
-
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="facility" class="facility">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">FACILITY DATABASE</div>
+      <h2 class="section-title">THE <span>FACILITY</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="facility-box scan-box">
+      <p>
+        The facility was built for research that was never meant to become
+        public. What begins as a controlled environment gradually becomes
+        something much harder to understand.
+      </p>
+      <br>
+      <p>
+        The deeper you go, the less reliable the environment becomes.
+        Doors may lead somewhere unexpected, familiar areas may feel different,
+        and the facility's history is scattered across the places left behind.
+      </p>
+      <div class="facility-warning">
+        INTERNAL NOTICE: FACILITY INFORMATION MAY BE INCOMPLETE.
+        SOME RECORDS HAVE BEEN REDACTED.
+      </div>
+    </div>
+    <div class="progression">
+      <div class="location"><div class="location-number">ZONE 01</div><div class="location-name">LABS</div></div>
+      <div class="location"><div class="location-number">ZONE 02</div><div class="location-name">HOTEL</div></div>
+      <div class="location"><div class="location-number">ZONE 03</div><div class="location-name">BASEMENTS</div></div>
+      <div class="location"><div class="location-number">ZONE 04</div><div class="location-name">SEWERS</div></div>
+      <div class="location"><div class="location-number">ZONE 05</div><div class="location-name">MINES</div></div>
+      <div class="location"><div class="location-number">ZONE 06</div><div class="location-name">THE PARADOX</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="paradox">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">REDACTED RESEARCH</div>
+      <h2 class="section-title">PARADOX <span>FILES</span></h2>
+      <div class="red-line"></div>
+      <p class="section-lead">
+        The following entries are fictional L.U.R.E universe material and are
+        presented as part of the game's research-facility theme.
+      </p>
+    </div>
+    <div class="files-grid">
+      <article class="file-card"><div class="file-label">FILE 001</div><h3>PROJECT PARADOX</h3><p>A restricted research program associated with unexplained changes inside sections of the facility.</p></article>
+      <article class="file-card"><div class="file-label">FILE 002</div><h3>THE REDACTED WING</h3><p>A section of the facility removed from standard maps and marked inaccessible in surviving documentation.</p></article>
+      <article class="file-card"><div class="file-label">FILE 003</div><h3>UNKNOWN SIGNAL</h3><p>Repeating transmissions were recorded from below the facility. Their source remains part of the mystery.</p></article>
+      <article class="file-card"><div class="file-label">FILE 004</div><h3>HOLY CRUCIFIX</h3><p>A fictional story element connected to the facility's mythology and the creatures encountered within the PARADOX.</p></article>
+      <article class="file-card"><div class="file-label">FILE 005</div><h3>ORANGO</h3><p>The player character enters the facility and becomes connected to the events surrounding PARADOX.</p></article>
+      <article class="file-card"><div class="file-label">FILE 006</div><h3>ACCESS DENIED</h3><p>Additional information has been removed from this public record. Further details may appear in future game updates.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="trailer" class="trailer">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">MEDIA</div>
+      <h2 class="section-title">WATCH THE <span>TRAILER</span></h2>
+      <div class="red-line center-line"></div>
+    </div>
+    <div class="trailer-frame">
+      <div class="trailer-placeholder">TRAILER PLACEHOLDER</div>
+    </div>
+    <p class="trailer-note">Replace this area with your YouTube trailer embed when the trailer is ready.</p>
+  </div>
+</section>
+
+<section id="screenshots">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">VISUAL ARCHIVE</div>
+      <h2 class="section-title"><span>SCREENSHOTS</span></h2>
+      <div class="red-line"></div>
+      <p class="section-lead">
+        In-game images and development visuals can be placed here as L.U.R.E
+        continues through development.
+      </p>
+    </div>
+    <div class="gallery">
+      <figure class="gallery-item">
+        <img src="cover.jpg" alt="L.U.R.E facility">
+        <figcaption class="gallery-caption">FACILITY ARCHIVE — COVER IMAGE</figcaption>
+      </figure>
+      <figure class="gallery-item">
+        <img src="lure-character.jpg" alt="L.U.R.E character">
+        <figcaption class="gallery-caption">CHARACTER ARCHIVE</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="character-section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">SUBJECT DATABASE</div>
+      <h2 class="section-title">MEET <span>ORANGO</span></h2>
+      <div class="red-line center-line"></div>
+    </div>
+    <img class="character-image" src="lure-character.jpg" alt="L.U.R.E character">
+    <p class="character-copy">
+      Orango is the main player character of L.U.R.E. The journey begins inside
+      the facility, where exploration slowly exposes the strange history of
+      PARADOX and the areas hidden beneath the surface.
+    </p>
+  </div>
+</section>
+
+<section id="beta" class="beta">
+  <div class="container">
+    <div class="beta-box">
+      <div class="beta-status">● CURRENTLY IN BETA</div>
+      <h2>HELP TEST L.U.R.E</h2>
+      <p>
+        L.U.R.E is currently being developed and tested. Beta testers can help
+        identify bugs, test new builds, and provide feedback as development continues.
+      </p>
+      <div class="button-row">
+        <a class="btn btn-red btn-wide" href="https://www.meta.com/s/55McLhncS" target="_blank" rel="noopener noreferrer">BETA ACCESS</a>
+        <a class="btn btn-dark btn-wide" href="https://discord.gg/CqhTJkusB" target="_blank" rel="noopener noreferrer">COMMUNITY</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rdt">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">DEVELOPMENT TEAM</div>
+      <h2 class="section-title"><span>RDT</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="rdt-box">
+      <div>
+        <div class="rdt-mark">RDT</div>
+        <div class="rdt-name">RIFLEPULSE DEVELOPMENT TEAM</div>
+      </div>
+      <p class="rdt-copy">
+        RDT is the development team behind L.U.R.E. The team works on game
+        development, testing, design, community management, and future updates.
+      </p>
+    </div>
+    <div class="button-row" style="margin-top:25px;">
+      <a class="btn btn-red btn-wide" href="https://docs.google.com/forms/d/e/1FAIpQLSf6jsT2vzMuZp_b-h-m7ARroZ7fqv-zqnQsSCUne7r8I8uQUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">APPLICATION PORTAL</a>
+      <a class="btn btn-discord btn-wide" href="https://discord.gg/CqhTJkusB" target="_blank" rel="noopener noreferrer">RDT DISCORD</a>
+    </div>
+  </div>
+</section>
+
+<section id="development">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">DEVELOPMENT</div>
+      <h2 class="section-title">DEVELOPMENT <span>LOG</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="timeline">
+      <article class="timeline-item"><div class="timeline-date">STAGE 01</div><div class="timeline-content"><h3>CORE PROJECT</h3><p>The initial VR project and player foundation were established.</p></div></article>
+      <article class="timeline-item"><div class="timeline-date">STAGE 02</div><div class="timeline-content"><h3>PLAYER SYSTEM</h3><p>VR locomotion, camera tracking, hand targets, and player systems continued to be integrated.</p></div></article>
+      <article class="timeline-item"><div class="timeline-date">STAGE 03</div><div class="timeline-content"><h3>FACILITY BUILD</h3><p>Facility sections, lighting, props, collision, and environmental systems were added to the project.</p></div></article>
+      <article class="timeline-item"><div class="timeline-date">STAGE 04</div><div class="timeline-content"><h3>BETA TESTING</h3><p>Testing builds are being prepared so issues can be identified and the experience can continue to improve.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="link-hub">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">EXTERNAL ACCESS</div>
+      <h2 class="section-title">PROJECT <span>LINKS</span></h2>
+      <div class="red-line center-line"></div>
+      <p class="section-lead" style="margin-left:auto;margin-right:auto;">
+        Reserved link spaces for future L.U.R.E and RDT services.
+      </p>
+    </div>
+    <div class="link-grid">
+      <a class="link-slot" href="#" data-link-slot="01"><strong>LINK SLOT 01</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="02"><strong>LINK SLOT 02</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="03"><strong>LINK SLOT 03</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="04"><strong>LINK SLOT 04</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="05"><strong>LINK SLOT 05</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="06"><strong>LINK SLOT 06</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="07"><strong>LINK SLOT 07</strong><small>EDIT HREF IN HTML</small></a>
+      <a class="link-slot" href="#" data-link-slot="08"><strong>LINK SLOT 08</strong><small>EDIT HREF IN HTML</small></a>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">TRANSMISSIONS</div>
+      <h2 class="section-title">LATEST <span>UPDATES</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="news-grid">
+      <article class="news-card"><div class="news-date">UPDATE 001</div><h3>BETA DEVELOPMENT</h3><p>L.U.R.E continues through testing and development while new systems and areas are being worked on.</p></article>
+      <article class="news-card"><div class="news-date">UPDATE 002</div><h3>FACILITY EXPANSION</h3><p>Additional facility areas and environmental details are planned for future development builds.</p></article>
+      <article class="news-card"><div class="news-date">UPDATE 003</div><h3>COMMUNITY TESTING</h3><p>Feedback from testing is being used to identify issues and improve the overall L.U.R.E experience.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-kicker">DATABASE HELP</div>
+      <h2 class="section-title">FREQUENTLY ASKED <span>QUESTIONS</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="faq">
+      <article class="faq-item">
+        <button class="faq-question" type="button">What is L.U.R.E?<span>+</span></button>
+        <div class="faq-answer">L.U.R.E is a VR horror game being developed by RiflePulse Development Team.</div>
+      </article>
+      <article class="faq-item">
+        <button class="faq-question" type="button">Is L.U.R.E currently in beta?<span>+</span></button>
+        <div class="faq-answer">Yes. The website currently identifies the project as being in beta testing.</div>
+      </article>
+      <article class="faq-item">
+        <button class="faq-question" type="button">Where can I find development updates?<span>+</span></button>
+        <div class="faq-answer">Development updates can be added to this website and shared through the project's community channels.</div>
+      </article>
+      <article class="faq-item">
+        <button class="faq-question" type="button">Can I apply to help with development?<span>+</span></button>
+        <div class="faq-answer">Use the project's application area when applications are open.</div>
+      </article>
+      <article class="faq-item">
+        <button class="faq-question" type="button">Will the website change?<span>+</span></button>
+        <div class="faq-answer">Yes. The website can be updated as L.U.R.E gains new features, screenshots, trailers, information, and release details.</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <div class="cta-box">
+      <h2>THE PARADOX AWAITS</h2>
+      <p>
+        Enter the project, follow development, and stay connected with the
+        RiflePulse Development Team.
+      </p>
+      <div class="button-row">
+        <a class="btn btn-red btn-wide" href="https://www.meta.com/s/55McLhncS" target="_blank" rel="noopener noreferrer">BETA</a>
+        <a class="btn btn-discord btn-wide" href="https://discord.gg/CqhTJkusB" target="_blank" rel="noopener noreferrer">DISCORD</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">RIFLEPULSE DEVELOPMENT TEAM</div>
+      <div class="footer-copy">© 2026 RDT. L.U.R.E is a work in development.</div>
+    </div>
+    <div class="footer-links">
+      <a href="privacy.html">PRIVACY POLICY</a>
+      <a href="https://discord.gg/CqhTJkusB" target="_blank" rel="noopener noreferrer">COMMUNITY</a>
+      <a href="#top">BACK TO TOP</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+
+if (navToggle && navLinks) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
+
+document.querySelectorAll(".nav-links a").forEach((link) => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("open");
+    if (navToggle) {
+      navToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+});
+
+document.querySelectorAll(".faq-question").forEach((question) => {
+  question.addEventListener("click", () => {
+    const item = question.closest(".faq-item");
+    if (!item) {
+      return;
+    }
+    item.classList.toggle("open");
+    const icon = question.querySelector("span");
+    if (icon) {
+      icon.textContent = item.classList.contains("open") ? "−" : "+";
+    }
+  });
+});
+
+document.querySelectorAll('a[href="#"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+});
+
+window.addEventListener("scroll", () => {
+  const nav = document.querySelector(".nav");
+  if (!nav) {
+    return;
+  }
+  if (window.scrollY > 20) {
+    nav.style.boxShadow = "0 8px 30px rgba(0,0,0,0.35)";
+  } else {
+    nav.style.boxShadow = "none";
+  }
+});
+</script>
+
+<!-- FUTURE CONTENT ARCHIVE -->
+<!-- The following comments are reserved for future L.U.R.E website expansion. -->
+<!-- FUTURE LURE CONTENT LINE 001: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 002: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 003: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 004: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 005: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 006: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 007: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 008: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 009: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 010: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 011: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 012: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 013: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 014: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 015: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 016: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 017: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 018: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 019: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 020: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 021: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 022: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 023: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 024: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 025: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 026: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 027: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 028: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 029: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 030: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 031: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 032: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 033: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 034: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 035: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 036: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 037: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 038: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 039: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 040: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 041: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 042: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 043: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 044: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 045: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 046: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 047: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 048: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 049: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 050: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 051: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 052: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 053: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 054: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 055: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 056: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 057: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 058: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 059: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 060: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 061: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 062: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 063: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 064: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 065: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 066: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 067: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 068: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 069: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 070: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 071: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 072: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 073: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 074: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 075: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 076: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 077: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 078: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 079: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 080: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 081: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 082: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 083: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 084: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 085: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 086: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 087: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 088: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 089: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 090: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 091: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 092: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 093: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 094: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 095: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 096: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 097: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 098: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 099: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 100: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 101: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 102: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 103: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 104: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 105: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 106: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 107: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 108: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 109: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 110: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 111: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 112: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 113: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 114: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 115: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 116: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 117: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 118: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 119: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 120: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 121: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 122: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 123: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 124: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 125: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 126: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 127: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 128: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 129: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 130: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 131: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 132: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 133: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 134: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 135: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 136: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 137: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 138: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 139: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 140: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 141: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 142: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 143: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 144: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 145: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 146: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 147: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 148: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 149: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 150: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 151: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 152: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 153: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 154: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 155: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 156: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 157: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 158: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 159: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 160: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 161: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 162: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 163: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 164: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 165: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 166: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 167: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 168: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 169: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 170: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 171: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 172: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 173: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 174: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 175: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 176: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 177: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 178: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 179: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 180: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 181: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 182: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 183: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 184: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 185: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 186: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 187: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 188: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 189: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 190: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 191: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 192: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 193: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 194: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 195: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 196: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 197: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 198: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 199: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 200: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 201: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 202: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 203: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 204: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 205: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 206: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 207: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 208: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 209: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 210: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 211: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 212: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 213: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 214: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 215: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 216: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 217: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 218: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 219: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 220: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 221: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 222: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 223: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 224: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 225: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 226: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 227: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 228: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 229: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 230: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 231: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 232: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 233: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 234: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 235: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 236: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 237: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 238: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 239: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 240: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 241: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 242: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 243: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 244: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 245: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 246: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 247: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 248: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 249: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 250: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 251: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 252: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 253: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 254: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 255: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 256: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 257: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 258: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 259: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 260: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 261: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 262: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 263: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 264: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 265: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 266: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 267: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 268: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 269: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 270: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 271: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 272: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 273: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 274: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 275: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 276: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 277: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 278: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 279: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 280: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 281: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 282: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 283: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 284: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 285: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 286: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 287: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 288: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 289: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 290: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 291: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 292: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 293: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 294: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 295: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 296: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 297: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 298: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 299: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 300: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 301: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 302: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 303: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 304: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 305: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 306: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 307: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 308: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 309: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 310: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 311: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 312: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 313: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 314: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 315: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 316: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 317: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 318: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 319: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 320: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 321: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 322: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 323: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 324: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 325: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 326: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 327: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 328: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 329: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 330: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 331: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 332: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 333: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 334: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 335: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 336: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 337: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 338: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 339: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 340: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 341: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 342: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 343: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 344: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 345: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 346: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 347: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 348: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 349: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 350: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 351: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 352: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 353: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 354: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 355: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 356: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 357: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 358: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 359: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 360: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 361: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 362: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 363: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 364: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 365: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 366: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 367: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 368: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 369: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 370: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 371: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 372: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 373: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 374: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 375: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 376: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 377: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 378: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 379: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 380: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 381: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 382: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 383: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 384: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 385: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 386: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 387: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 388: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 389: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 390: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 391: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 392: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 393: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 394: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 395: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 396: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 397: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 398: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 399: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 400: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 401: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 402: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 403: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 404: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 405: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 406: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 407: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 408: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 409: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 410: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 411: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 412: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 413: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 414: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 415: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 416: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 417: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 418: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 419: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 420: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 421: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 422: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 423: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 424: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 425: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 426: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 427: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 428: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 429: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 430: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 431: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 432: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 433: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 434: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 435: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 436: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 437: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 438: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 439: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 440: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 441: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 442: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 443: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 444: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 445: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 446: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 447: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 448: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 449: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 450: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 451: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 452: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 453: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 454: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 455: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 456: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 457: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 458: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 459: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 460: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 461: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 462: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 463: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 464: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 465: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 466: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 467: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 468: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 469: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 470: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 471: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 472: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 473: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 474: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 475: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 476: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 477: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 478: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 479: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 480: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 481: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 482: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 483: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 484: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 485: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 486: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 487: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 488: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 489: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 490: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 491: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 492: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 493: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 494: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 495: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 496: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 497: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 498: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 499: reserved for future site expansion -->
+<!-- FUTURE LURE CONTENT LINE 500: reserved for future site expansion -->
 </body>
 </html>
